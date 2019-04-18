@@ -1,2 +1,2 @@
 # tkios
-tk ios
+Aplikasi Tokokota untuk IOS
