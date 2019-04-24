@@ -1,0 +1,163 @@
+<html>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyCmABK4yYnveOGZf-kwxNn6fvqr1xMfH_o"></script>
+    <script src="gmaps.js"></script>
+
+    <title></title>
+    <body>
+        <div id="map"></div>
+        <div id='btn'></div>
+        <div id='address'>
+            <div class='p-address'>ini adalah alamat yang bisa panjang sekali</div>        
+            <div class='btn-address'>edit</div>        
+        </div> 
+        <div class='btn-next'>LANJUTKAN</div>
+        
+    </body>
+    <style>
+         #map{
+            width: 100%;
+            display: table;
+            height: 500px;
+        }
+        #btn{
+            width:156.716px;
+            height:70px;
+            background:url(btn_map_lokasi.png);
+            background-size:contain;
+            right:0;left:0;
+            display:block;
+            position: absolute;
+            top:0;
+
+        }
+        #address{
+            position: absolute;
+            top: 0;
+            background: white;
+            padding: 10px 5px;
+            width: 89%;
+            display: none;
+            margin: 5;
+            border-radius: 2px;
+        }
+        .p-address{
+            
+        }
+        .btn-address{
+            background: #2196F3;
+            padding: 2px 5px;
+            width: 50;
+            text-align: center;
+            color: white;
+            border-radius: 2px;
+            margin-top:5px;
+            
+        }
+        .btn-next{
+            display: none;
+            position: absolute;
+            top: 0;
+            background: #e94328;
+            width: 100%;
+            padding: 15px 0px;
+            border-radius: 3px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            margin: 0 auto;
+        }
+        body,html{padding:0px;margin:0px;font-family: sans-serif !important;}
+    </style>
+    <script>
+        var latFix,lngFix,addressFix;
+        var maps = new GMaps({
+            div: '#map',
+            lat: -0.027698,
+            lng: 109.343101,
+            height:550+"px",
+            disableDefaultUI:true
+        });
+        
+        setTimeout(function(){
+            var h = document.body.offsetHeight;
+            var w = document.body.offsetWidth;
+            var btn = document.getElementById("btn");
+            var btnEdit = document.getElementsByClassName("btn-address")[0];
+            var btnNext = document.getElementsByClassName("btn-next")[0];
+            var pAddress =  document.getElementsByClassName("p-address")[0];
+            var addr = document.getElementById("address");   
+            btn.style.top = ((h/2)-(70+(35)));
+            btn.style.left = ((w/2)-(156.716/2));
+
+            //btnNext position
+            var btnNextWidth = btnNext.offsetWidth;
+            //btnNext.style.left = (w/2) - 150;
+            btnNext.style.top = h - 160;
+            btnNext.style.width = w;
+        
+            btn.addEventListener("click",function(){
+                var lat = maps.getCenter().lat();
+                var lng = maps.getCenter().lng();
+                //get address
+                getAddress(lat,lng,function(address){
+                    maps.addMarker({
+                        lat: lat,
+                        lng: lng,
+                        title: 'Lokasi Anda',
+                        click: function(e) {
+                            post("Ini Lokasi Anda")
+                        }
+                    });
+                    pAddress.innerHTML = address ;
+                    addr.style.display = "table";
+                    btn.style.display       = "none";
+                    btnNext.style.display   = "table";
+
+                    latFix = lat;
+                    lngFix = lng;
+                    addressFix = address;
+
+                })
+            })
+
+            btnEdit.addEventListener("click",function(){
+                btn.style.display = "block";
+                addr.style.display = "none";
+                maps.removeMarkers();
+            });
+
+            btnNext.addEventListener("click",function(){
+                var data = {
+                    lat : latFix,
+                    lng : lngFix,
+                    address : addressFix
+                }
+                post(JSON.stringify(data))
+            });
+
+        });
+
+        function getAddress(lat, lng,cb) {
+            var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+lng+"&key=AIzaSyCmABK4yYnveOGZf-kwxNn6fvqr1xMfH_o";
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url);
+            xhr.responseType = 'json';
+            xhr.send();
+            xhr.onload = function() {
+                var res = xhr.response;
+                return cb(res.results[0].formatted_address);
+            };
+        }
+            
+
+        function post(data){
+            setTimeout(function(){
+                window.postMessage(data)                
+            });    
+        }
+     
+
+    </script>
+
+</html>

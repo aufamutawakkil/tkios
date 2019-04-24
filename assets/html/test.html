@@ -1,0 +1,25 @@
+<html>
+    <title>SIAP</title>
+    <body >
+        INI SAYA AUFA
+    </body>
+    <script>
+        function waitForBridge() {
+            
+            //the react native postMessage has only 1 parameter
+            //while the default one has 2, so check the signature
+            //of the function
+            
+            if (window.postMessage.length !== 1){
+                
+                setTimeout(waitForBridge, 200);
+            }
+            else {
+                
+                window.postMessage('abc');
+            }
+        }
+        
+   window.onload = waitForBridge;
+   </script>
+</html>

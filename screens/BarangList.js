@@ -64,7 +64,7 @@ export default class BarangList extends React.Component{
         </TouchableOpacity>
     );
 
-    _keyExtractor = (item, index) => item;
+    _keyExtractor = (item, index) => item.id;
 
     _onPressItem = (item) => {
         this.props.navigation.navigate("BarangDetail",{id:item.id,"title":item.nama})

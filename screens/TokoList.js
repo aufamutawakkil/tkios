@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         textAlign:"center"
     },
     items:{
-        margin:10
+        padding:5
     }
 
 });

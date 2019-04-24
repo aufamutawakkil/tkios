@@ -6,6 +6,13 @@ const profile = (cb) => {
     });
 }
 
+const updateOrder = (order,cb) => {
+    AsyncStorage.mergeItem("order",JSON.stringify(order),(err,p)=>{
+        return cb(true);
+    });
+}
+
 export default {
-    profile
+    profile,
+    updateOrder
 }

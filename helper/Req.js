@@ -7,7 +7,7 @@ const start = (url,method,headers,body,cb) => {
     }
     if( !body ) body = "";
     else body = convertURI(body);
-    //console.log(body)
+    console.log(body)
 
     fetch(url, {
         method: method,
@@ -34,8 +34,9 @@ const convertURI = (body) =>{
         for( var i=0;i<100;i++){
             b =  b.replace('":"',"=");
             b =  b.replace('","',"&");
+            b =  b.replace('":',"=");
+            b =  b.replace(',"',"&");
         }
-
     return b;
 }
 

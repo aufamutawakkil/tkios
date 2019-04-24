@@ -1,5 +1,6 @@
-import {AsyncStorage} from 'react-native'; 
+import {AsyncStorage,Dimensions} from 'react-native'; 
 import URL from '../constants/URL'; 
+
 const isLogin  = (cb) => {
     AsyncStorage.getItem('profile', (err, r) => {
         var r = JSON.parse(r);
@@ -10,13 +11,14 @@ const isLogin  = (cb) => {
     });    
 }
 
-const formatCurrency = (angka) => {
+const formatCurrency = (angka,pref="Rp. ") => {
+    if( angka === undefined || angka == null ) return "0";
     angka = angka.toString();
     angka = Number(angka);
 	var rupiah = '';		
 	var angkarev = angka.toString().split('').reverse().join('');
 	for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+',';
-	return rupiah.split('',rupiah.length-1).reverse().join('');
+	return pref+rupiah.split('',rupiah.length-1).reverse().join('');
 }
 
 const isTimeInRange = (timeFrom,timeTo) => {
@@ -27,15 +29,21 @@ const isTimeInRange = (timeFrom,timeTo) => {
 }
 
 const convertUrl = (urlfull) => {
+    if( urlfull == null || urlfull == "" ) return "";
     var url = urlfull.split("assets");
     if( url.length > 0  )
         return URL.baseAdminUrl + "/assets" + url[1];
     else return '';
 }
 
+const screenPros = (pros) => {
+    return ((Dimensions.get('window').width*pros)/100);
+}
+
 export default{
     isLogin,
     convertUrl,
     formatCurrency,
-    isTimeInRange
+    isTimeInRange,
+    screenPros
 }

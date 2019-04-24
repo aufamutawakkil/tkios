@@ -52,7 +52,7 @@ export default class kategoriList extends React.Component{
         </TouchableOpacity>
     );
 
-    _keyExtractor = (item, index) => item;
+    _keyExtractor = (item, index) => item.id;
 
     _onPressItem = (item) => {
         this.state.navigation.navigate("BarangList",{katId:item.id,"title":item.nama})
